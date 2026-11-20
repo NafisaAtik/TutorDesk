@@ -1,0 +1,97 @@
+{
+  "entities": {
+    "Batch": {
+      "title": "Batch",
+      "description": "An HSC ICT coaching batch managed by a tutor.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner tutor UID." },
+        "name": { "type": "string", "description": "Batch name, e.g. HSC-26 Morning ICT." },
+        "hscLevel": { "type": "string", "enum": ["XI", "XII", "HSC Revision"], "description": "Academic level." },
+        "scheduleDays": { "type": "string", "description": "Weekly class days, e.g. Sat · Mon · Wed." },
+        "scheduleTime": { "type": "string", "description": "Class start time, e.g. 08:00 AM." },
+        "room": { "type": "string", "description": "Classroom or online room label." },
+        "currentTopic": { "type": "string", "description": "Current HSC ICT chapter/topic." },
+        "monthlyFeeBdt": { "type": "integer", "description": "Standard monthly tuition fee in BDT." },
+        "maxCapacity": { "type": "integer", "description": "Maximum student seat capacity." },
+        "status": { "type": "string", "enum": ["ACTIVE", "ARCHIVED"], "description": "Batch status." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["userId", "name", "hscLevel", "scheduleDays", "scheduleTime", "room", "currentTopic", "monthlyFeeBdt", "maxCapacity", "status", "createdAt", "updatedAt"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "An HSC ICT student enrolled in a tutor's batch.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner tutor UID." },
+        "batchId": { "type": "string", "description": "Enrolled batch document ID." },
+        "batchName": { "type": "string", "description": "Denormalized batch name." },
+        "name": { "type": "string", "description": "Student full name." },
+        "college": { "type": "string", "description": "Student college name." },
+        "rollNumber": { "type": "string", "description": "Batch roll or student ID." },
+        "guardianPhone": { "type": "string", "description": "Guardian contact number." },
+        "monthlyFeeBdt": { "type": "integer", "description": "Student monthly tuition fee in BDT." },
+        "status": { "type": "string", "enum": ["ACTIVE", "PAUSED"], "description": "Enrollment status." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["userId", "batchId", "batchName", "name", "college", "rollNumber", "guardianPhone", "monthlyFeeBdt", "status", "createdAt", "updatedAt"]
+    },
+    "AttendanceRecord": {
+      "title": "AttendanceRecord",
+      "description": "Daily roll-call record for a student in a batch.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner tutor UID." },
+        "batchId": { "type": "string", "description": "Batch document ID." },
+        "studentId": { "type": "string", "description": "Student document ID." },
+        "studentName": { "type": "string", "description": "Denormalized student name." },
+        "dateIso": { "type": "string", "description": "ISO date string YYYY-MM-DD." },
+        "status": { "type": "string", "enum": ["PRESENT", "LATE", "ABSENT"], "description": "Roll-call status." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["userId", "batchId", "studentId", "studentName", "dateIso", "status", "createdAt", "updatedAt"]
+    },
+    "FeePayment": {
+      "title": "FeePayment",
+      "description": "Monthly BDT tuition fee ledger entry for a student.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner tutor UID." },
+        "studentId": { "type": "string", "description": "Student document ID." },
+        "studentName": { "type": "string", "description": "Denormalized student name." },
+        "batchId": { "type": "string", "description": "Batch document ID." },
+        "batchName": { "type": "string", "description": "Denormalized batch name." },
+        "monthKey": { "type": "string", "description": "Billing month YYYY-MM." },
+        "expectedFeeBdt": { "type": "integer", "description": "Expected monthly tuition fee in BDT." },
+        "paidAmountBdt": { "type": "integer", "description": "Total amount paid in BDT for the month." },
+        "paymentMethod": { "type": "string", "enum": ["Cash", "bKash", "Nagad", "Rocket", "Bank"], "description": "Payment channel." },
+        "note": { "type": "string", "description": "Optional receipt or payment note." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["userId", "studentId", "studentName", "batchId", "batchName", "monthKey", "expectedFeeBdt", "paidAmountBdt", "paymentMethod", "note", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/batches/{batchId}": {
+      "schema": { "$ref": "#/entities/Batch" },
+      "description": "Tutor's HSC ICT batches scoped to userId."
+    },
+    "/users/{userId}/students/{studentId}": {
+      "schema": { "$ref": "#/entities/Student" },
+      "description": "Tutor's enrolled students scoped to userId."
+    },
+    "/users/{userId}/attendance/{recordId}": {
+      "schema": { "$ref": "#/entities/AttendanceRecord" },
+      "description": "Tutor's daily student attendance records scoped to userId."
+    },
+    "/users/{userId}/feePayments/{paymentId}": {
+      "schema": { "$ref": "#/entities/FeePayment" },
+      "description": "Tutor's monthly BDT tuition fee ledger scoped to userId."
+    }
+  }
+}

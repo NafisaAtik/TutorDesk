@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TutorDesk</string>
+    <string name="tagline_hsc_ict">HSC ICT Batch &amp; Tuition Manager</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_out">Sign out</string>
+    <string name="nav_batches">Batches</string>
+    <string name="nav_attendance">Attendance</string>
+    <string name="nav_fees">Fees</string>
+    <string name="nav_students">Students</string>
+    <string name="currency_taka_symbol">৳</string>
+</resources>

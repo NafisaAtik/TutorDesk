@@ -1,0 +1,6 @@
+{
+  "name": "TutorDesk",
+  "description": "HSC ICT batch, attendance, and monthly BDT tuition fee manager for private tutors and coaching mentors.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
